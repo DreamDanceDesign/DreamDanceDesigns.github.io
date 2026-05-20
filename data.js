@@ -56,7 +56,7 @@ const PRODUCTS = {
       name: "Ruched Bralette",
       type: "top",
       desc: "Soft ruched front bralette with adjustable straps. Made to order in your two custom fabrics.",
-      img: "images/ruched-bralette.jpeg",
+      img: "images/ruched-bralette.jpg",
       colors: [
         { key: "color1", label: "Main Body" },
         { key: "color2", label: "Straps" }
@@ -67,7 +67,7 @@ const PRODUCTS = {
       name: "One Shoulder Top",
       type: "top",
       desc: "Asymmetric one-shoulder top with a clean line and structured fit.",
-      img: "images/one-shoulder-top.jpeg",
+      img: "images/one-shoulder-top.jpg",
       colors: [
         { key: "color1", label: "Main Body" },
         { key: "color2", label: "Straps" }
@@ -91,7 +91,7 @@ const PRODUCTS = {
       name: "High Waisted Booty Shorts",
       type: "bottom",
       desc: "Flattering high-rise booty shorts in a single fabric for a clean, sleek look.",
-      img: "images/booty-shorts.jpeg",
+      img: "images/booty-shorts.jpg",
       colors: [
         { key: "color1", label: "Main Body" }
       ]
@@ -101,7 +101,7 @@ const PRODUCTS = {
       name: "Standard Brief",
       type: "bottom",
       desc: "Classic dance brief with a contrast waistband.",
-      img: "images/standard-brief.jpeg",
+      img: "images/standard-brief.jpg",
       colors: [
         { key: "color1", label: "Main Body" },
         { key: "color2", label: "Waistband" }
