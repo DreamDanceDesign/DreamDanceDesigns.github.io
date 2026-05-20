@@ -56,7 +56,7 @@ const PRODUCTS = {
       name: "Ruched Bralette",
       type: "top",
       desc: "Soft ruched front bralette with adjustable straps. Made to order in your two custom fabrics.",
-      img: null,
+      img: ruched-bralette.jpeg,
       colors: [
         { key: "color1", label: "Main Body" },
         { key: "color2", label: "Straps" }
@@ -67,7 +67,7 @@ const PRODUCTS = {
       name: "One Shoulder Top",
       type: "top",
       desc: "Asymmetric one-shoulder top with a clean line and structured fit.",
-      img: null,
+      img: one-shoulder-top.jpeg,
       colors: [
         { key: "color1", label: "Main Body" },
         { key: "color2", label: "Straps" }
@@ -78,7 +78,7 @@ const PRODUCTS = {
       name: "Longline Ruched Top",
       type: "top",
       desc: "Extended longline silhouette with ruched detailing — beautiful on its own or paired with high-waist bottoms.",
-      img: null,
+      img: longline-ruched-top.jpeg,
       colors: [
         { key: "color1", label: "Main Body" },
         { key: "color2", label: "Straps" }
@@ -91,7 +91,7 @@ const PRODUCTS = {
       name: "High Waisted Booty Shorts",
       type: "bottom",
       desc: "Flattering high-rise booty shorts in a single fabric for a clean, sleek look.",
-      img: null,
+      img: booty-shorts.jpeg,
       colors: [
         { key: "color1", label: "Main Body" }
       ]
@@ -101,7 +101,7 @@ const PRODUCTS = {
       name: "Standard Brief",
       type: "bottom",
       desc: "Classic dance brief with a contrast waistband.",
-      img: null,
+      img: standard-brief.jpeg,
       colors: [
         { key: "color1", label: "Main Body" },
         { key: "color2", label: "Waistband" }
@@ -112,7 +112,7 @@ const PRODUCTS = {
       name: "Featured Brief",
       type: "bottom",
       desc: "Brief with feature straps and a contrast waistband for an elevated look on stage.",
-      img: null,
+      img: featured-brief.jpg,
       colors: [
         { key: "color1", label: "Main Body" },
         { key: "color2", label: "Waistband & Straps" }
