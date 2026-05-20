@@ -19,6 +19,27 @@ const CONFIG = {
   }
 };
 
+// All measurements in inches. Edit ranges below if needed.
+const SIZE_CHART = {
+  unit: "inches",
+  columns: ["Bust", "Waist", "Hips", "Girth"],
+  children: [
+    { size: "XXSM (2-3)",  values: ["19–21", "19–21", "21–22", "36–37"] },
+    { size: "XSM (4-5)",   values: ["19–22", "19–21", "22–23", "37–39"] },
+    { size: "SM (6-7)",    values: ["22–24", "20–22", "23–25", "39–43"] },
+    { size: "M (8-10)",    values: ["23–25", "22–25", "25–28", "43–47"] },
+    { size: "LG (12)",     values: ["25–30", "24–26", "28–30", "48–51"] },
+    { size: "XLG (14-16)", values: ["26–31", "25–29", "29–32", "49–52"] }
+  ],
+  adults: [
+    { size: "XSM", values: ["30–32", "24–26", "29–33", "51–53"] },
+    { size: "SM",  values: ["32–34", "24–27", "34–36", "54–59"] },
+    { size: "M",   values: ["34–36", "26–28", "36–38", "59–63"] },
+    { size: "LG",  values: ["36–39", "29–32", "38–40", "61–66"] },
+    { size: "XLG", values: ["39–42", "33–34", "41–44", "64–70"] }
+  ]
+};
+
 // Each product lists its color zones — the order matters (color1, color2…). 1-color items omit color2.
 const PRODUCTS = {
   tops: [
