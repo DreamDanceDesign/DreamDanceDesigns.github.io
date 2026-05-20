@@ -91,7 +91,7 @@ const PRODUCTS = {
       name: "High Waisted Booty Shorts",
       type: "bottom",
       desc: "Flattering high-rise booty shorts in a single fabric for a clean, sleek look.",
-      img: "images/booty-shorty.jpeg",
+      img: "images/booty-shorts.jpeg",
       colors: [
         { key: "color1", label: "Main Body" }
       ]
