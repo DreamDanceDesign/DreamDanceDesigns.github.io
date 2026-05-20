@@ -107,6 +107,7 @@ window.addEventListener("hashchange", () => { router(); window.scrollTo(0, 0); }
 function renderHome() {
   app.innerHTML = `
     <section class="hero">
+      <p class="slogan">Stand out in style.</p>
       <h1><span class="accent">Handmade</span> dancewear,<br/>made just for you.</h1>
       <span class="divider"></span>
       <p>${CONFIG.tagline} Pick a style, pick your fabrics, and your custom piece will be sewn and shipped within a few weeks.</p>
@@ -133,7 +134,109 @@ function renderHome() {
         <strong>Bundle &amp; save:</strong> pair any top with any bottom for ${fmt(CONFIG.pricing.bundle)} instead of ${fmt(CONFIG.pricing.perItem * 2)}.
       </div>
     </section>
+
+    ${customInquirySection()}
   `;
+
+  wireCustomInquiry();
+}
+
+function customInquirySection() {
+  return `
+    <section class="collection inquiry-wrap" id="custom-inquiry">
+      <div class="inquiry-card">
+        <div class="inquiry-intro">
+          <p class="kicker">Stand out in style</p>
+          <h2>Want something fully custom?</h2>
+          <p class="inquiry-blurb">Solo costumes, group pieces, or a one-of-a-kind design that isn't listed above — Jo-Anne loves a custom project. Tell her about your vision and she'll reach out with pricing and next steps. Custom pieces are priced individually and tend to run higher than the ready-to-order styles above.</p>
+        </div>
+
+        <form class="inquiry-form" id="inquiry-form">
+          <div class="form-grid">
+            <label class="field"><span>Your name</span>
+              <input type="text" name="name" required autocomplete="name" placeholder="Jane Dancer">
+            </label>
+            <label class="field"><span>Email</span>
+              <input type="email" name="email" required autocomplete="email" placeholder="you@example.com">
+            </label>
+            <label class="field"><span>Phone (optional)</span>
+              <input type="tel" name="phone" autocomplete="tel" placeholder="(555) 555-0123">
+            </label>
+            <label class="field"><span>Project type</span>
+              <select name="projectType" class="size-select" required>
+                <option value="">— Select one —</option>
+                <option>Custom piece (one item, custom design)</option>
+                <option>Solo costume</option>
+                <option>Group / team costumes</option>
+                <option>Other / not sure</option>
+              </select>
+            </label>
+            <label class="field"><span>Number of pieces (optional)</span>
+              <input type="text" name="pieces" placeholder="e.g. 1, or 12 for a group">
+            </label>
+            <label class="field"><span>Date needed by (optional)</span>
+              <input type="date" name="dueDate">
+            </label>
+            <label class="field full"><span>Describe your vision</span>
+              <textarea name="vision" rows="4" required placeholder="Style, colors, fabrics, inspiration, performance details — anything that helps Jo-Anne picture it."></textarea>
+            </label>
+          </div>
+          <button class="add-to-cart" type="submit" id="inquiry-submit">Send custom request</button>
+          <p class="inquiry-status" id="inquiry-status"></p>
+        </form>
+      </div>
+    </section>
+  `;
+}
+
+function wireCustomInquiry() {
+  const form = $("#inquiry-form");
+  if (!form) return;
+  const status = $("#inquiry-status");
+  const submit = $("#inquiry-submit");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    submit.disabled = true;
+    submit.textContent = "Sending...";
+    status.textContent = "";
+    status.className = "inquiry-status";
+
+    const data = Object.fromEntries(new FormData(form));
+    const message = [
+      `CUSTOM REQUEST from the website`,
+      ``,
+      `Name: ${data.name}`,
+      `Email: ${data.email}`,
+      data.phone ? `Phone: ${data.phone}` : null,
+      ``,
+      `Project type: ${data.projectType}`,
+      data.pieces ? `Number of pieces: ${data.pieces}` : null,
+      data.dueDate ? `Date needed by: ${data.dueDate}` : null,
+      ``,
+      `VISION`,
+      data.vision
+    ].filter(Boolean).join("\n");
+
+    const ok = await sendWeb3Form({
+      subject: `Custom request from ${data.name}`,
+      replyto: data.email,
+      message
+    });
+
+    if (ok) {
+      form.reset();
+      status.textContent = "✓ Sent! Jo-Anne will reach out within a few days.";
+      status.classList.add("good");
+      submit.textContent = "Send another request";
+      submit.disabled = false;
+    } else {
+      status.innerHTML = `Couldn't send right now. Please email <a href="mailto:${CONFIG.payment.contactEmail}">${CONFIG.payment.contactEmail}</a> directly with your request.`;
+      status.classList.add("bad");
+      submit.textContent = "Try again";
+      submit.disabled = false;
+    }
+  });
 }
 
 function productCard(p) {
@@ -183,6 +286,8 @@ function renderProduct(id) {
 
         ${p.colors.map(c => colorPickerSection(c)).join("")}
 
+        <div class="combo-preview" id="combo-preview" hidden></div>
+
         ${sizePickerSection()}
 
         <button class="add-to-cart" id="add-btn" disabled>Pick your fabrics and size to continue</button>
@@ -206,6 +311,7 @@ function renderProduct(id) {
       const swatch = group.swatches[+sw.dataset.idx];
       sel.selected = { name: swatch.name, group: group.id };
       renderColorSection(c);
+      renderComboPreview();
       updateAddButton();
     });
   });
@@ -268,7 +374,7 @@ function sizeChartHTML() {
             <tbody>${tableRows(SIZE_CHART.adults)}</tbody>
           </table>
         </div>
-        <p class="size-note">Between sizes? Mention your exact measurements in the order notes — every piece is made to order.</p>
+        <p class="size-note">Not sure about your size? Reach out via the custom request form for help picking the right fit.</p>
       </div>
     </details>
   `;
@@ -291,7 +397,7 @@ function sizePickerSection() {
         ${optGroup("Childrens", SIZE_CHART.children)}
         ${optGroup("Adults", SIZE_CHART.adults)}
       </select>
-      <p class="texture-note">See the size chart next to the product image. Add exact measurements in the order notes if you're between sizes.</p>
+      <p class="texture-note">See the size chart next to the product image to find your fit.</p>
     </div>
   `;
 }
@@ -342,6 +448,65 @@ function renderColorSection(color) {
   } else {
     $(`#selected-${color.key}`).textContent = "Pick a swatch";
   }
+}
+
+function renderComboPreview() {
+  const wrap = $("#combo-preview");
+  if (!wrap) return;
+  const p = productState.product;
+  const picks = p.colors.map(c => ({
+    label: c.label,
+    sel: productState.selections[c.key].selected
+  }));
+
+  // Only show preview once every color is picked.
+  if (!picks.every(p => p.sel)) {
+    wrap.hidden = true;
+    wrap.innerHTML = "";
+    return;
+  }
+
+  const swatchData = (sel) => {
+    const group = FABRIC_GROUPS.find(g => g.id === sel.group);
+    const swatch = group.swatches.find(s => s.name === sel.name) || {};
+    const bg = swatch.img ? `background-image:url('${swatch.img}'); background-color:${swatch.hex};` : `background-color:${swatch.hex};`;
+    const txtClr = isLightColor(swatch.hex) ? "#1a1a1a" : "#faf7f2";
+    return { bg, txtClr, label: group.label.replace(/ \+\$\d+/, ""), name: sel.name };
+  };
+
+  wrap.hidden = false;
+  wrap.innerHTML = `
+    <div class="combo-head">
+      <span class="kicker">Your custom design</span>
+      <h4>${escapeHtml(p.name)}, just for you</h4>
+    </div>
+    <div class="combo-blocks ${picks.length === 1 ? "single" : ""}">
+      ${picks.map(pk => {
+        const s = swatchData(pk.sel);
+        return `
+          <div class="combo-block" style="${s.bg}">
+            <div class="combo-inner" style="color:${s.txtClr};">
+              <span class="zone">${escapeHtml(pk.label)}</span>
+              <span class="name">${escapeHtml(s.name)}</span>
+              <span class="texture">${escapeHtml(s.label)}</span>
+            </div>
+          </div>
+        `;
+      }).join("")}
+    </div>
+  `;
+}
+
+// Quick luminance check so text on light swatches stays readable.
+function isLightColor(hex) {
+  if (!hex) return false;
+  const h = hex.replace("#", "");
+  if (h.length !== 6) return false;
+  const r = parseInt(h.slice(0,2), 16);
+  const g = parseInt(h.slice(2,4), 16);
+  const b = parseInt(h.slice(4,6), 16);
+  // Standard luminance formula
+  return (0.299 * r + 0.587 * g + 0.114 * b) > 160;
 }
 
 function isReadyToAdd() {
@@ -723,7 +888,7 @@ function buildOrderEmail(order) {
   ].filter(Boolean).join("\n");
 }
 
-async function sendOrderEmail(order) {
+async function sendWeb3Form({ subject, replyto, message }) {
   if (!CONFIG.payment.web3formsKey) return false;
   try {
     const res = await fetch("https://api.web3forms.com/submit", {
@@ -731,10 +896,10 @@ async function sendOrderEmail(order) {
       headers: { "Content-Type": "application/json", "Accept": "application/json" },
       body: JSON.stringify({
         access_key: CONFIG.payment.web3formsKey,
-        subject: `New order ${order.id} — ${order.customer.name}`,
+        subject,
         from_name: "Dream Dance Designs Website",
-        replyto: order.customer.email,
-        message: buildOrderEmail(order)
+        replyto,
+        message
       })
     });
     const data = await res.json().catch(() => ({}));
@@ -743,6 +908,14 @@ async function sendOrderEmail(order) {
     console.error("Web3Forms send failed:", e);
     return false;
   }
+}
+
+function sendOrderEmail(order) {
+  return sendWeb3Form({
+    subject: `New order ${order.id} — ${order.customer.name}`,
+    replyto: order.customer.email,
+    message: buildOrderEmail(order)
+  });
 }
 
 function emailStatusSection(order, mailto) {
