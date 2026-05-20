@@ -129,7 +129,7 @@ function renderHome() {
       <div class="product-grid">${PRODUCTS.bottoms.map(productCard).join("")}</div>
     </section>
 
-    <section class="collection">
+    <section class="collection bundle-section">
       <div class="bundle-note">
         <strong>Bundle &amp; save:</strong> pair any top with any bottom for ${fmt(CONFIG.pricing.bundle)} instead of ${fmt(CONFIG.pricing.perItem * 2)}.
       </div>

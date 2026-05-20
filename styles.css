@@ -920,8 +920,17 @@ nav { display: flex; gap: 2rem; align-items: center; }
   opacity: 0.85;
 }
 
+/* ---------- Bundle banner spacing ---------- */
+/* Tighter padding so it doesn't float between the products and the inquiry below. */
+.bundle-section {
+  padding-top: 0;
+  padding-bottom: clamp(1.5rem, 3vw, 2.5rem);
+}
+
 /* ---------- Custom inquiry section ---------- */
-.inquiry-wrap { margin-top: 3rem; }
+.inquiry-wrap {
+  padding-top: clamp(1rem, 2vw, 1.5rem);
+}
 
 .inquiry-card {
   background: white;
