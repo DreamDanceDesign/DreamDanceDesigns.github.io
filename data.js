@@ -78,7 +78,7 @@ const PRODUCTS = {
       name: "Longline Ruched Top",
       type: "top",
       desc: "Extended longline silhouette with ruched detailing — beautiful on its own or paired with high-waist bottoms.",
-      img: null,
+      img: "images/longline-ruched-top.jpg",
       colors: [
         { key: "color1", label: "Main Body" },
         { key: "color2", label: "Straps" }
@@ -112,7 +112,7 @@ const PRODUCTS = {
       name: "Featured Brief",
       type: "bottom",
       desc: "Brief with feature straps and a contrast waistband for an elevated look on stage.",
-      img: null,
+      img: "images/featured-brief.jpg",
       colors: [
         { key: "color1", label: "Main Body" },
         { key: "color2", label: "Waistband & Straps" }
